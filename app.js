@@ -1,26 +1,37 @@
 global._ = require('underscore');
 
-var memcache = require('memcache')
-  , app = require('express')()
-  , server = require('http').createServer(app)
+var express = require('express')
+  , routes = require('./routes')
+  , http = require('http')
+  , path = require('path')
+  , app = express()
+  , server = http.createServer(app)
   , io = require('socket.io').listen(server);
-  
-//var memcacheClient = new memcache.Client(11211, 'localhost');
-//memcacheClient.connect();
 
-server.listen(8080);
+server.listen(8082);
 
-app.get('/', function (req, res) {
-  res.sendfile(__dirname + '/index.html');
-});
-app.get('/drawing.js', function (req, res) {
-  res.sendfile(__dirname + '/drawing.js');
-});
-app.get('/underscore.js', function (req, res) {
-  res.sendfile(__dirname + '/node_modules/underscore/underscore.js');
+app.configure(function(){
+  app.set('views', __dirname + '/views');
+  app.set('view engine', 'jade');
+  app.use(express.favicon());
+  app.use(express.logger('dev'));
+  app.use(express.bodyParser());
+  app.use(express.methodOverride());
+  app.use(app.router);
+  app.use(express.static(path.join(__dirname, 'public')));
 });
 
-require('./drawing.js');
+app.configure('development', function(){
+  app.use(express.errorHandler());
+});
+
+app.get('/', routes.index);
+app.get('/javascripts/underscore.js', function(req,res){
+ res.sendfile(__dirname + '/node_modules/underscore/underscore-min.js');
+});
+
+
+require('./public/javascripts/drawing.js');
 
 var drawing = new Drawing();
 
