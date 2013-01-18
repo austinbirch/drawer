@@ -1,7 +1,11 @@
 doctype 5
-html
+html(lang="en")
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
     block content
+    script(src='/javascripts/underscore.js')
+    script(src='/socket.io/socket.io.js')
+    script(src='/javascripts/drawing.js')
+    script(src='/javascripts/client.js')
