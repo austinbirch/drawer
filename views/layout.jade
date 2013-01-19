@@ -1,11 +1,25 @@
 doctype 5
 html(lang="en")
-  head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
-  body
-    block content
-    script(src='/javascripts/underscore.js')
-    script(src='/socket.io/socket.io.js')
-    script(src='/javascripts/drawing.js')
-    script(src='/javascripts/client.js')
+	head
+		title= title
+		link(rel='stylesheet', href='/stylesheets/style.css')
+	body
+		block content
+		script(src='/require.js')
+		script
+			requirejs.config({
+				baseUrl: '/javascripts',
+				paths: {
+					'socket.io': '/socket.io/socket.io',
+					'public': '/javascripts'
+				},
+				shim: {
+					'socket.io': {
+						exports: 'io'
+					},
+					underscore: {
+						exports: '_'
+					}
+				}
+			});
+			requirejs(['client']);

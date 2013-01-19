@@ -1,3 +1,8 @@
+requirejs(['socket.io', 'public/drawing'],
+function(io, Drawing) {
+
+"use strict";
+
 var socket = io.connect(location.origin);
 var canvas = document.getElementById('drawing');
 var ctx = canvas.getContext('2d');
@@ -49,3 +54,5 @@ canvas.addEventListener('mouseup', function(event) {
 	currentLine.isFinished = true;
 	currentLine = null;
 }, false);
+
+});

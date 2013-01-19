@@ -1,12 +1,21 @@
-global._ = require('underscore');
+var requirejs = require('requirejs');
 
-var express = require('express')
-  , routes = require('./routes')
-  , http = require('http')
-  , path = require('path')
-  , app = express()
+requirejs.config({
+	nodeRequire: require,
+	baseDir: __dirname,
+	paths: {
+		'public':'public/javascripts'
+	}
+});
+
+requirejs(['underscore', 'express', './routes', 'http', 'path', 'socket.io', 'public/drawing', 'public/line'],
+function   (_, express, routes, http, path, socketio, Drawing, Line) {
+
+"use strict";
+
+var app = express()
   , server = http.createServer(app)
-  , io = require('socket.io').listen(server);
+  , io = socketio.listen(server);
 
 server.listen(8080);
 
@@ -26,12 +35,12 @@ app.configure('development', function(){
 });
 
 app.get('/', routes.index);
+app.get('/require.js', function(req,res){
+ res.sendfile(__dirname + '/node_modules/requirejs/require.js');
+});
 app.get('/javascripts/underscore.js', function(req,res){
  res.sendfile(__dirname + '/node_modules/underscore/underscore-min.js');
 });
-
-
-require('./public/javascripts/drawing.js');
 
 var drawing = new Drawing();
 
@@ -61,4 +70,6 @@ io.sockets.on('connection', function (socket) {
   	socket.broadcast.emit('lineFinished', id);
   	saveDrawing();
   });
+});
+
 });
