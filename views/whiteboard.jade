@@ -1,0 +1,25 @@
+extends layout
+
+block content
+	input(id="reset", value="Clear", type="button", style="display: block;")
+	canvas(id="drawing", width="1000", height="1000")
+	script
+		window.token = '#{token}';
+	script(src='/require.js')
+	script
+		requirejs.config({
+			baseUrl: '/javascripts',
+			paths: {
+				'socket.io': '/socket.io/socket.io',
+				'public': '/javascripts'
+			},
+			shim: {
+				'socket.io': {
+					exports: 'io'
+				},
+				underscore: {
+					exports: '_'
+				}
+			}
+		});
+		requirejs(['client']);
