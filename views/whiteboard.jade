@@ -2,6 +2,7 @@ extends layout
 
 block content
 	input(id="reset", value="Clear", type="button", style="display: block;")
+	a(href="mailto:%20?subject=Whiteboard&body=http%3A%2F%2Fnrbrook.drawer.jit.su%2Fb%2F#{token}") Share this whiteboard
 	canvas(id="drawing", width="1000", height="1000")
 	script
 		window.token = '#{token}';

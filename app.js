@@ -55,7 +55,13 @@ app.get('/b', function(req,res) {
 	res.writeHead(302, { Location: '/' });
 	res.end();
 });
-app.get('/b/:token', routes.whiteboard);
+app.get('/b/:token', function(req,res) {
+	if(!sessions[req.params.token]) {
+		res.writeHead(302, { Location: '/' });
+		res.end();
+	}
+	res.render('whiteboard', { title: 'Whiteboard', token: req.params.token });
+});
 app.get('/require.js', function(req,res){
  res.sendfile(__dirname + '/node_modules/requirejs/require.js');
 });
