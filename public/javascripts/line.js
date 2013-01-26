@@ -21,7 +21,7 @@ Line.revive = function(drawing, line) {
 Line.prototype = {
 	setupContext: function() {
 		if(!this.drawing.context) return;
-		this.drawing.context.strokeStyle = 'hsla('+this.color+',100%,50%,1)';	
+		this.drawing.context.strokeStyle = 'hsla('+this.color+',100%,0%,1)';	
 		this.drawing.context.lineWidth = this.size;	
 	},
 

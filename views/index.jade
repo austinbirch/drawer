@@ -1,5 +1,10 @@
 extends layout
 
 block content
-  h1 Welcome.
-  a(href='/new') Create a new whiteboard
+	h1 Welcome.
+	p This is a collaborative whiteboard.  You create a new session, then share the url with friends who can draw on the whiteboard at the same time as you do.
+	a(href='/new') Create a new whiteboard
+	
+	p(class="small")
+		| The source code for this project is 
+		a(href="https://github.com/nrbrook/drawer") available on GitHub

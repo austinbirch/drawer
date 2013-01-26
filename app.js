@@ -51,6 +51,10 @@ app.get('/new', function(req,res) {
 		res.end();
 	});
 });
+app.get('/b', function(req,res) {
+	res.writeHead(302, { Location: '/' });
+	res.end();
+});
 app.get('/b/:token', routes.whiteboard);
 app.get('/require.js', function(req,res){
  res.sendfile(__dirname + '/node_modules/requirejs/require.js');

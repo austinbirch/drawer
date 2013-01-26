@@ -1,7 +1,7 @@
 requirejs(['socket.io', 'public/drawing'],
 function(io, Drawing) {
 
-"use strict";
+//"use strict";
 
 var socket = io.connect(location.origin);
 var canvas = document.getElementById('drawing');
@@ -34,25 +34,38 @@ document.getElementById('reset').addEventListener('click', function(event) {
 }, false);
 
 var pointFromEvent = function(event) {
-	return {x:event.clientX-canvas.offsetLeft,y:event.clientY-canvas.offsetTop};
+	return {x:event.pageX-canvas.offsetLeft,y:event.pageY-canvas.offsetTop};
 }
 
-canvas.addEventListener('mousedown', function(event) {
+function downEvent(event) {
 	  var point = pointFromEvent(event);
 	currentLine = drawing.startLine(point);
 	socket.emit('newLine', currentLine.toJSON());
-}, false);
-canvas.addEventListener('mousemove', function(event) {
+	event.preventDefault();
+}
+
+function moveEvent(event) {
 	if(currentLine) {
 		var point = pointFromEvent(event);
 	  	currentLine.update(point);
 	  	socket.emit('updateLine', [currentLine.id,point]);
 	}
-}, false);
-canvas.addEventListener('mouseup', function(event) {
+	event.preventDefault();
+}
+
+function upEvent(event) {
 	socket.emit('lineFinished', currentLine.id);
 	currentLine.isFinished = true;
 	currentLine = null;
-}, false);
+	event.preventDefault();
+}
+
+canvas.addEventListener('mousedown', downEvent, false);
+canvas.addEventListener('mousemove', moveEvent, false);
+canvas.addEventListener('mouseup', upEvent, false);
+canvas.addEventListener('touchstart', downEvent, false);
+canvas.addEventListener('touchmove', moveEvent, false);
+canvas.addEventListener('touchend', upEvent, false);
+
 
 });
